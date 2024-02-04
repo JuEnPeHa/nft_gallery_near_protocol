@@ -1,11 +1,11 @@
-import 'package:audio_player/models/metadataMintbase.dart';
+import 'package:nft_gallery/models/metadataMintbase.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'resultNFTMetadataMintbase.g.dart';
 
 @JsonSerializable(explicitToJson: true)
 class ResultNFTMetadataMintbase {
-  final int id;
+  final int? id;
   @JsonKey(name: 'owner_id')
   final Object? ownerId;
   final Object? approvals;

@@ -1,4 +1,4 @@
-import 'package:audio_player/models/result.dart';
+import 'package:nft_gallery/models/result.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'marketNFTLogoPetition.g.dart';

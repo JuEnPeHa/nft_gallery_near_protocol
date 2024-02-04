@@ -1,4 +1,4 @@
-# audio_player
+# nft_gallery
 
 A new Flutter project.
 

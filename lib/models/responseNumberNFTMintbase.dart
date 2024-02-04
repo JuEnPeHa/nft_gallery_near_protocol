@@ -1,4 +1,4 @@
-import 'package:audio_player/models/resultReference.dart';
+import 'package:nft_gallery/models/resultReference.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'responseNumberNFTMintbase.g.dart';

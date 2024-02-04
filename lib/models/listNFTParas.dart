@@ -1,4 +1,4 @@
-import 'package:audio_player/models/resultNFTMetadataParas.dart';
+import 'package:nft_gallery/models/resultNFTMetadataParas.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'listNFTParas.g.dart';

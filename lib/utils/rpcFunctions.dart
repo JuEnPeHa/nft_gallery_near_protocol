@@ -1,21 +1,22 @@
 import 'dart:convert';
+import 'dart:developer' as developer;
 import 'dart:math';
 
-import 'package:audio_player/interceptor/dio_connectivity_request_retrier.dart';
-import 'package:audio_player/interceptor/retry_interceptor.dart';
-import 'package:audio_player/models/arweaveRawMetadata.dart';
-import 'package:audio_player/models/listNFTMintbase.dart';
-import 'package:audio_player/models/listNFTParas.dart';
-import 'package:audio_player/models/marketNFTLogoPetition.dart';
-import 'package:audio_player/models/marketNFTLogoResponse.dart';
-import 'package:audio_player/models/nft.dart';
-import 'package:audio_player/models/nft_marketplace.dart';
-import 'package:audio_player/models/resultNFTMetadataMintbase.dart';
-import 'package:audio_player/models/resultNFTMetadataParas.dart';
+import 'package:nft_gallery/interceptor/dio_connectivity_request_retrier.dart';
+import 'package:nft_gallery/interceptor/retry_interceptor.dart';
+import 'package:nft_gallery/models/arweaveRawMetadata.dart';
+import 'package:nft_gallery/models/listNFTMintbase.dart';
+import 'package:nft_gallery/models/listNFTParas.dart';
+import 'package:nft_gallery/models/marketNFTLogoPetition.dart';
+import 'package:nft_gallery/models/marketNFTLogoResponse.dart';
+import 'package:nft_gallery/models/nft.dart';
+import 'package:nft_gallery/models/nft_marketplace.dart';
+import 'package:nft_gallery/models/resultNFTMetadataMintbase.dart';
+import 'package:nft_gallery/models/resultNFTMetadataParas.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
-import 'package:audio_player/constants.dart';
+import 'package:nft_gallery/constants.dart';
 
 var rng = Random();
 
@@ -24,6 +25,7 @@ Future<List<dynamic>> fetchNFTMarketplaces(String aID, bool isM) async {
       ? Uri.parse(ACCOUNT_HELPER_URL + '/account/' + aID + '/likelyNFTs')
       : Uri.parse(
           ACCOUNT_HELPER_URL_TESTNET + '/account/' + aID + '/likelyNFTs');
+  developer.log(likelyContracts.toString());
 
   var response = await http.get(likelyContracts, headers: HEADERS);
 
@@ -270,9 +272,8 @@ Future<ArweaveRawMetadata> fetchNftFinalMintbase({
   var response = await dio.get(url);
   //var response = await http.get(url, headers: HEADERS);
   if (response.statusCode == 200) {
-    ArweaveRawMetadata generic =
-        ArweaveRawMetadata.fromJson(response.data);
-        print("GENERICGENERICGENERICGENERICGENERIC" + generic.toString());
+    ArweaveRawMetadata generic = ArweaveRawMetadata.fromJson(response.data);
+    print("GENERICGENERICGENERICGENERICGENERIC" + generic.toString());
     return generic;
   } else {
     throw Exception('Failed to load NFTs');
@@ -306,7 +307,8 @@ List<String> getMarketplacesClean({required List<dynamic> marketplaces}) {
 Map<String, Object> getHttpBody(
     {required String methodName,
     required String marketplace,
-    String argsBase64 = "e30="}) {
+    String argsBase64 = "e30=",
+    String finality = "optimistic"}) {
   return {
     'jsonrpc': '2.0',
     'method': "query",
@@ -316,7 +318,7 @@ Map<String, Object> getHttpBody(
       "account_id": marketplace,
       "method_name": methodName,
       "args_base64": argsBase64,
-      "finality": "optimistic"
+      "finality": finality
     },
   };
 }

@@ -6,17 +6,18 @@ part 'result.g.dart';
 class Result {
   final List<int> result;
   final List<dynamic> logs;
+  //TODO: Añadir que se pueda recibir para el usuario.
   @JsonKey(name: 'block_height')
   final int blockHeight;
   @JsonKey(name: 'block_hash')
   final String blockHash;
 
-const Result({
-  required this.result,
-  required this.logs,
-  required this.blockHeight,
-  required this.blockHash,
-});
+  const Result({
+    required this.result,
+    required this.logs,
+    required this.blockHeight,
+    required this.blockHash,
+  });
 
   factory Result.fromJson(Map<String, dynamic> json) => _$ResultFromJson(json);
   Map<String, dynamic> toJson() => _$ResultToJson(this);

@@ -1,19 +1,18 @@
-import 'package:audio_player/constants.dart';
-import 'package:audio_player/hive_models/hive_data.dart';
-import 'package:audio_player/models/arweaveRawMetadata.dart';
-import 'package:audio_player/models/listNFTParas.dart';
-import 'package:audio_player/models/nft.dart';
-import 'package:audio_player/models/nft_marketplace.dart';
-import 'package:audio_player/models/resultNFTMetadataMintbase.dart';
-import 'package:audio_player/models/resultNFTMetadataParas.dart';
-import 'package:audio_player/quinta_page.dart';
-import 'package:audio_player/widgets/neumor.dart';
+import 'package:nft_gallery/constants.dart';
+import 'package:nft_gallery/hive_models/hive_data.dart';
+import 'package:nft_gallery/models/arweaveRawMetadata.dart';
+import 'package:nft_gallery/models/listNFTParas.dart';
+import 'package:nft_gallery/models/nft.dart';
+import 'package:nft_gallery/models/nft_marketplace.dart';
+import 'package:nft_gallery/models/resultNFTMetadataMintbase.dart';
+import 'package:nft_gallery/models/resultNFTMetadataParas.dart';
+import 'package:nft_gallery/main_screens.dart';
+import 'package:nft_gallery/widgets/neumor.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import 'package:audio_player/utils/rpcFunctions.dart';
-import 'package:nil/nil.dart';
+import 'package:nft_gallery/utils/rpcFunctions.dart';
 
 class CuartaPage extends StatefulWidget {
   const CuartaPage({Key? key}) : super(key: key);
@@ -34,7 +33,7 @@ class _CuartaPageState extends State<CuartaPage> {
       return showCupertinoDialog(
           context: context,
           builder: (context) {
-            return CupertinoAlertDialog(
+            return AlertDialog.adaptive(
               title: const Text('Invalid account'),
               content: const Text('Please enter a valid account'),
               actions: <Widget>[
@@ -403,7 +402,7 @@ class _CuartaPageState extends State<CuartaPage> {
                       Navigator.pushReplacement(
                           context,
                           CupertinoPageRoute(
-                              builder: ((context) => const QuintaPage()))));
+                              builder: ((context) => const MainScreens()))));
                 }
               : null,
           child: allDataComplete && nfts.isNotEmpty

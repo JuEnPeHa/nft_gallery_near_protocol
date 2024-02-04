@@ -1,4 +1,4 @@
-import 'package:audio_player/models/nft.dart';
+import 'package:nft_gallery/models/nft.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 class HiveData {

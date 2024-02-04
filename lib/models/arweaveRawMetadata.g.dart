@@ -11,7 +11,7 @@ ArweaveRawMetadata _$ArweaveRawMetadataFromJson(Map<String, dynamic> json) =>
       category: json['category'] ??= "",
       description: json['description'] as String? ?? '',
       copies: json['copies'] ??= 0,
-      mediaHash: json['media_hash'] as String,
+      mediaHash: json['media_hash'] as String? ?? '',
       mediaUrl: json['media'] as String,
       lock: json['lock'] ??= null,
       visibility: json['visibility'] ??= "",

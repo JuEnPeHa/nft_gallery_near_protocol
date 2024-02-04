@@ -1,21 +1,21 @@
-import 'package:audio_player/cuarta_page.dart';
-import 'package:audio_player/hive_models/hive_data.dart';
-import 'package:audio_player/models/nft.dart';
-import 'package:audio_player/nav_pages/documents_page.dart';
-import 'package:audio_player/nav_pages/gallery_page.dart';
-import 'package:audio_player/nav_pages/music_page.dart';
-import 'package:audio_player/nav_pages/video_page.dart';
+import 'package:nft_gallery/cuarta_page.dart';
+import 'package:nft_gallery/hive_models/hive_data.dart';
+import 'package:nft_gallery/models/nft.dart';
+import 'package:nft_gallery/nav_pages/documents_page.dart';
+import 'package:nft_gallery/nav_pages/gallery_page.dart';
+import 'package:nft_gallery/nav_pages/music_page.dart';
+import 'package:nft_gallery/nav_pages/video_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class QuintaPage extends StatefulWidget {
-  const QuintaPage({Key? key}) : super(key: key);
+class MainScreens extends StatefulWidget {
+  const MainScreens({Key? key}) : super(key: key);
 
   @override
   _QuintaPageState createState() => _QuintaPageState();
 }
 
-class _QuintaPageState extends State<QuintaPage> {
+class _QuintaPageState extends State<MainScreens> {
   final HiveData hiveData = HiveData();
   List<NftFinal> nfts = [];
   Future<void> _initHive() async {

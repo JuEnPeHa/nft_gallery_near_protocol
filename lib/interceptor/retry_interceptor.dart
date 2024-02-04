@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:audio_player/interceptor/dio_connectivity_request_retrier.dart';
+import 'package:nft_gallery/interceptor/dio_connectivity_request_retrier.dart';
 import 'package:dio/dio.dart';
 
 class RetryOnConnectionChangeInterceptor extends Interceptor {

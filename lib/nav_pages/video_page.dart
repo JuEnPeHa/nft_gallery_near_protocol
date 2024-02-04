@@ -1,4 +1,4 @@
-import 'package:audio_player/models/nft.dart';
+import 'package:nft_gallery/models/nft.dart';
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 

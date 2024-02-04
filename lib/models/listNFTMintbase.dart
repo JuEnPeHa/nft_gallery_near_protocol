@@ -1,4 +1,4 @@
-import 'package:audio_player/models/resultNFTMetadataMintbase.dart';
+import 'package:nft_gallery/models/resultNFTMetadataMintbase.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'listNFTMintbase.g.dart';

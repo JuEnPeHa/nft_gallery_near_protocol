@@ -1,4 +1,4 @@
-package com.jeph.audio_player
+package com.jeph.nft_gallery
 
 import io.flutter.embedding.android.FlutterActivity
 

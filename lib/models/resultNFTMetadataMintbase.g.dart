@@ -3,7 +3,7 @@ part of 'resultNFTMetadataMintbase.dart';
 ResultNFTMetadataMintbase _$ResultNFTMetadataMintbaseFromJson(
         Map<String, dynamic> json) =>
     ResultNFTMetadataMintbase(
-      id: json['id'] as int,
+      id: json['id'] as int?,
       ownerId: json['owner_id'] as Object?,
       approvals: json['approvals'] as Object?,
       metadata:

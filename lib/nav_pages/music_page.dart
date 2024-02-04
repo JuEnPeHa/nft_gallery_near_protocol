@@ -1,6 +1,6 @@
-import 'package:audio_player/components/custom_list_tile.dart';
-import 'package:audio_player/models/nft.dart';
-import 'package:audio_player/widgets/neumor.dart';
+import 'package:nft_gallery/components/custom_list_tile.dart';
+import 'package:nft_gallery/models/nft.dart';
+import 'package:nft_gallery/widgets/neumor.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
@@ -19,12 +19,35 @@ class _MusicPageState extends State<MusicPage> {
 
   IconData btnIcon = Icons.play_arrow;
 
-  AudioPlayer audioPlayer = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
+  late final AudioPlayer audioPlayer;
+
+  @override
+  void initState() {
+    audioPlayer = AudioPlayer(mode: PlayerMode.MEDIA_PLAYER);
+    audioPlayer.onPlayerCompletion.listen((event) {
+      setState(() {
+        btnIcon = Icons.play_arrow;
+      });
+    });
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    audioPlayer.stop();
+    audioPlayer.dispose();
+    super.dispose();
+  }
+
   bool isPlaying = false;
   String currentSong = "";
 
   Duration duration = Duration();
   Duration position = Duration();
+
+  void setStateIfMounted(VoidCallback fn) {
+    if (mounted) setState(fn);
+  }
 
   void playMusic(String url) async {
     if (isPlaying && currentSong != url) {
@@ -56,12 +79,14 @@ class _MusicPageState extends State<MusicPage> {
       }
     }
     audioPlayer.onDurationChanged.listen((event) {
-      setState(() {
+      setStateIfMounted(() {
+        print("ondurationchanged");
         duration = event;
       });
     });
     audioPlayer.onAudioPositionChanged.listen((event) {
-      setState(() {
+      setStateIfMounted(() {
+        print("onpositionchanged");
         position = event;
       });
     });
@@ -105,20 +130,29 @@ class _MusicPageState extends State<MusicPage> {
             principalColor: Colors.grey,
             padding: 2,
             child: Slider.adaptive(
-                value: position.inMilliseconds.toDouble(),
+                value: position.inMilliseconds.toDouble() ==
+                        duration.inMilliseconds.toDouble()
+                    ? 0.0
+                    : position.inMilliseconds.toDouble(),
                 min: 0.0,
                 //divisions: 1,
                 max: duration.inMilliseconds.toDouble() + 10,
                 onChanged: (double value) {
-                  audioPlayer.seek(Duration(milliseconds: value.toInt()));
-                  if (value >= duration.inMilliseconds.toDouble() - 1) {
-                    setState(() {
-                      audioPlayer.pause();
-                      audioPlayer.seek(const Duration(milliseconds: 0));
-                      btnIcon = Icons.play_circle_fill_outlined;
-                      isPlaying = false;
-                    });
-                  }
+                  print(value.toString() +
+                      " " +
+                      position.inMilliseconds.toString() +
+                      " " +
+                      duration.inMilliseconds.toString());
+                  // audioPlayer.seek(Duration(
+                  //     milliseconds: (value * duration.inMilliseconds).round()));
+                  // if (value + 3 >= duration.inMilliseconds) {
+                  //   setState(() {
+                  //     audioPlayer.pause();
+                  //     audioPlayer.seek(const Duration(milliseconds: 0));
+                  //     btnIcon = Icons.play_circle_fill_outlined;
+                  //     isPlaying = false;
+                  //   });
+                  // }
                 }),
           ),
         ),
@@ -207,4 +241,8 @@ class _MusicPageState extends State<MusicPage> {
       ],
     );
   }
+}
+
+int getCurrentTime(int currentTime, int maxTime) {
+  return currentTime * maxTime ~/ 100;
 }
