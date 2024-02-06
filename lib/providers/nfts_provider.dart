@@ -3,6 +3,7 @@ import 'package:nft_gallery/cuarta_page.dart';
 import 'package:nft_gallery/hive_models/hive_data.dart';
 import 'package:nft_gallery/main_screens.dart';
 import 'package:nft_gallery/models/nft.dart';
+import 'package:nft_gallery/starting_page.dart';
 
 class NftsProvider extends ChangeNotifier {
   bool isInit = false;
@@ -26,7 +27,7 @@ class NftsProvider extends ChangeNotifier {
       if (isEmpty) {
         WidgetsBinding.instance.addPostFrameCallback((_) {
           Navigator.pushReplacement(context,
-              MaterialPageRoute(builder: (context) => const CuartaPage()));
+              MaterialPageRoute(builder: (context) => const StartingPage()));
         });
       } else {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -37,19 +38,3 @@ class NftsProvider extends ChangeNotifier {
     }
   }
 }
-
-    //             if (nftsProvider.nfts.isEmpty) {
-    //               WidgetsBinding.instance.addPostFrameCallback((_) {
-    //                 Navigator.pushReplacement(
-    //                     context,
-    //                     MaterialPageRoute(
-    //                         builder: (context) => const CuartaPage()));
-    //               });
-    //             } else {
-    //               WidgetsBinding.instance.addPostFrameCallback((_) {
-    //                 Navigator.pushReplacement(
-    //                     context,
-    //                     MaterialPageRoute(
-    //                         builder: (context) => const MainScreens()));
-    //               });
-    //             }

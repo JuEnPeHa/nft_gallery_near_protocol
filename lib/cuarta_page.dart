@@ -49,9 +49,6 @@ class _CuartaPageState extends State<CuartaPage> {
     fetchAll();
     _controller.clear();
     _focusNode.unfocus();
-    // setState(() {
-    //   hiveData.add(value);
-    // });
   }
 
   _clear() {
@@ -180,12 +177,7 @@ class _CuartaPageState extends State<CuartaPage> {
           child: Column(
             children: [
               const SizedBox(height: 15),
-              Container(
-                child: const Text(
-                  "Por favor ingresa tu NEAR account",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-              ),
+              
               const SizedBox(height: 15),
               Container(
                 padding: EdgeInsets.symmetric(
