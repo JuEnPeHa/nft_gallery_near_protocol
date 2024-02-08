@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nft_gallery/providers/bloc/nfts_bloc.dart';
+import 'package:nft_gallery/widgets/neumor.dart';
 
 void showInvalidAccountDialog(BuildContext context) {
   showCupertinoDialog(
@@ -28,11 +29,12 @@ class StartingPage extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Scaffold(
-          appBar: PreferredSize(
-            preferredSize: const Size.fromHeight(50),
-            child: AppBarNear(),
-          ),
-          body: BodyNearAccount()),
+        appBar: PreferredSize(
+          preferredSize: const Size.fromHeight(50),
+          child: AppBarNear(),
+        ),
+        body: BodyNearAccount(),
+      ),
     );
   }
 }
@@ -46,7 +48,7 @@ class BodyNearAccount extends StatelessWidget {
       slivers: <Widget>[
         SliverToBoxAdapter(
           child: Column(
-            children: const <Widget>[
+            children: <Widget>[
               SizedBox(
                 height: 20,
               ),
@@ -55,6 +57,10 @@ class BodyNearAccount extends StatelessWidget {
                 height: 20,
               ),
               NearAccountInput(),
+              ButtonBarSubmitClear(
+                onClear: () {},
+                onSubmit: () {},
+              ),
               SizedBox(
                 height: 20,
               ),
@@ -128,6 +134,40 @@ class _NearAccountInputState extends State<NearAccountInput> {
           );
         },
       ),
+    );
+  }
+}
+
+class ButtonBarSubmitClear extends StatelessWidget {
+  const ButtonBarSubmitClear({
+    Key? key,
+    required this.onClear,
+    required this.onSubmit,
+  }) : super(key: key);
+
+  final VoidCallback onClear;
+  final VoidCallback onSubmit;
+
+  @override
+  Widget build(BuildContext context) {
+    return ButtonBar(
+      alignment: MainAxisAlignment.spaceAround,
+      children: [
+        NeumorConverter(
+            principalColor: Colors.grey,
+            padding: 2,
+            child: CupertinoButton(
+              child: const Text("Submit"),
+              onPressed: () => onSubmit(),
+            )),
+        NeumorConverter(
+            principalColor: Colors.grey,
+            padding: 2,
+            child: CupertinoButton(
+              child: const Text("Clear"),
+              onPressed: () => onClear(),
+            )),
+      ],
     );
   }
 }
