@@ -3,7 +3,7 @@ import 'package:nft_gallery/cuarta_page.dart';
 import 'package:nft_gallery/hive_models/hive_data.dart';
 import 'package:nft_gallery/main_screens.dart';
 import 'package:nft_gallery/models/nft.dart';
-import 'package:nft_gallery/starting_page.dart';
+import 'package:nft_gallery/nav_pages/starting_page/starting_page.dart';
 
 class NftsProvider extends ChangeNotifier {
   bool isInit = false;

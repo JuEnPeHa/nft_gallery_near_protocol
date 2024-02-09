@@ -46,7 +46,7 @@ class _CuartaPageState extends State<CuartaPage> {
           });
     }
     nearAccountId = value;
-    fetchAll();
+    fetchAllOld();
     _controller.clear();
     _focusNode.unfocus();
   }
@@ -69,7 +69,7 @@ class _CuartaPageState extends State<CuartaPage> {
   late bool mainnet;
   bool allDataComplete = false;
   bool validAccount = false;
-  List<dynamic> nftMarketplaces = [];
+  List<String> nftMarketplaces = [];
   List<dynamic> nftMarketplacesPreClean = [];
   List<MarketplacesClean> marketplacesClean = [];
   List<int> numberNfts = [];
@@ -79,7 +79,7 @@ class _CuartaPageState extends State<CuartaPage> {
   bool isCharging = false;
   String nearAccountId = "";
 
-  void fetchAll() async {
+  void fetchAllOld() async {
     mainnet = isMainnet(nearAccountId);
     fetchNFTMarketplaces(nearAccountId, mainnet).then((value) {
       nftMarketplaces.addAll(value);
@@ -177,7 +177,6 @@ class _CuartaPageState extends State<CuartaPage> {
           child: Column(
             children: [
               const SizedBox(height: 15),
-              
               const SizedBox(height: 15),
               Container(
                 padding: EdgeInsets.symmetric(
@@ -407,12 +406,6 @@ class _CuartaPageState extends State<CuartaPage> {
           backgroundColor: allDataComplete ? Colors.indigo : Colors.grey,
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-        // bottomNavigationBar: BottomNavigationBar(
-        //   items: const [
-        //     BottomNavigationBarItem(icon: Icon(Icons.abc), label: "Hey"),
-        //     BottomNavigationBarItem(icon: Icon(Icons.ac_unit), label: "Hola")
-        //   ],
-        // ),
       ),
     );
   }

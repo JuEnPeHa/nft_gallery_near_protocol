@@ -8,6 +8,7 @@ class NeumorConverter extends StatelessWidget {
     this.isButton = false,
     required this.child,
     this.padding = 50,
+    this.margin = 0,
   })  : assert(principalColor != null),
         assert(isButton != null),
         super(key: key);
@@ -15,12 +16,14 @@ class NeumorConverter extends StatelessWidget {
   final bool isButton;
   final Widget child;
   final double padding;
+  final double margin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: child,
       padding: EdgeInsets.all(padding),
+      margin: EdgeInsets.all(margin),
       decoration: BoxDecoration(
           color: principalColor[300],
           borderRadius: BorderRadius.circular(12.5),

@@ -20,7 +20,7 @@ import 'package:nft_gallery/constants.dart';
 
 var rng = Random();
 
-Future<List<dynamic>> fetchNFTMarketplaces(String aID, bool isM) async {
+Future<List<String>> fetchNFTMarketplaces(String aID, bool isM) async {
   var likelyContracts = isM
       ? Uri.parse(ACCOUNT_HELPER_URL + '/account/' + aID + '/likelyNFTs')
       : Uri.parse(
@@ -29,8 +29,12 @@ Future<List<dynamic>> fetchNFTMarketplaces(String aID, bool isM) async {
 
   var response = await http.get(likelyContracts, headers: HEADERS);
 
+  // response.body is: "["mintbase.near","paras.near"]" or "[]" so need to parse
+
   if (response.statusCode == 200) {
-    return json.decode(response.body);
+    final List<dynamic> likelyNFTs = json.decode(response.body);
+    print(likelyNFTs);
+    return likelyNFTs.map((e) => e.toString()).toList();
   } else {
     throw Exception('Failed to load likely NFTs');
   }
@@ -219,6 +223,56 @@ Future<int> fetchNumberNFTParas({
   }
 }
 
+Future<List<int>> fetchNumberNFTAllConcurrent({
+  required List<dynamic> marketplaces,
+  required String accountId,
+}) async {
+  const methodName = "nft_supply_for_owner";
+  var url = Uri.parse(RPC_URL);
+  var args = {
+    "account_id": accountId,
+  };
+  var argsBase64 = base64.encode(utf8.encode(json.encode(args)));
+  print(argsBase64);
+
+  List<Future<int>> futures = [];
+  for (var i = 0; i < marketplaces.length; i++) {
+    var marketplace = marketplaces[i];
+    var requestBody = getHttpBody(
+        methodName: methodName,
+        marketplace: marketplace,
+        argsBase64: argsBase64);
+
+    futures.add(http
+        .post(url, body: json.encode(requestBody), headers: HEADERS)
+        .then((response) {
+      if (response.statusCode == 200) {
+        print(json.decode(response.body));
+        var generic =
+            GenericJsonRpcResponse.fromJson(json.decode(response.body));
+        print(decodeBufferIntForNumberNftOnAccount(
+            bufferForDecode: generic.result.result));
+        var inside = json.decode(json.encode(
+            decodeBufferIntForNumberNftOnAccount(
+                bufferForDecode: generic.result.result)));
+        if (inside is int) {
+          return inside;
+        } else {
+          return 0;
+        }
+      } else {
+        return 0;
+        // throw Exception('Failed to load NFTs');
+      }
+    }).catchError((error) {
+      print(error);
+      return 0;
+    }));
+  }
+  List<int> number = await Future.wait(futures);
+  return number;
+}
+
 Future<List<int>> fetchNumberNFTAll({
   required List<dynamic> marketplaces,
   required String accountId,
@@ -293,7 +347,7 @@ List<dynamic> decodeBuffer({required List<int> bufferForDecode}) {
   return decoded;
 }
 
-List<String> getMarketplacesClean({required List<dynamic> marketplaces}) {
+List<String> getMarketplacesClean({required List<String> marketplaces}) {
   List<String> marketplacesClean = [];
   for (var i = 0; i < marketplaces.length; i++) {
     if (marketplaces[i].contains('mintbase') ||
@@ -324,7 +378,14 @@ Map<String, Object> getHttpBody(
 }
 
 bool isValidAccount(String accountID) {
-  return accountID.contains(".near") || accountID.contains(".testnet");
+  final String accountToValidate = accountID.replaceAll(" ", "");
+  final bool contains = accountToValidate.contains(".near") ||
+      accountToValidate.contains(".testnet");
+  final bool validAccount = contains &&
+          accountToValidate.indexOf(".near") == accountToValidate.length - 5 ||
+      contains &&
+          accountToValidate.indexOf(".testnet") == accountToValidate.length - 8;
+  return validAccount;
 }
 
 bool isMainnet(String accountID) {
