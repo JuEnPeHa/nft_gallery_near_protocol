@@ -31,7 +31,7 @@ class _QuintaPageState extends State<MainScreens> {
 
   List<Widget> _pages() => [
         GalleryPage(nfts: nfts),
-        MusicPage(nfts: nfts),
+        // MusicPage(nfts: nfts),
         VideoPage(nfts: nfts),
         DocumentPage(nfts: nfts)
       ];

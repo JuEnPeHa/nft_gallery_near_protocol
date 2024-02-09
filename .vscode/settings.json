@@ -1,3 +1,4 @@
 {
-  "dart.devToolsBrowser": "default"
+  "dart.devToolsBrowser": "default",
+  "java.configuration.updateBuildConfiguration": "interactive"
 }
