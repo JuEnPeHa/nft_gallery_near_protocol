@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:nft_gallery/nav_pages/starting_page/body_contratos.dart';
 import 'package:nft_gallery/nav_pages/starting_page/dialogs_invalid_account_store_dialog.dart';
 import 'package:nft_gallery/providers/bloc/nfts_bloc.dart';
 import 'package:nft_gallery/widgets/neumor.dart';
@@ -21,8 +22,10 @@ class BodyMarketplaces extends StatelessWidget {
               Divider(
                 height: 15,
               ),
+              if (state is NftsInitialState) const ShimmerInitialText(),
+              if (state is NftsLoadingState) const ShimmerLoadingList(),
               state.mapStoreWithBaseUri.isEmpty
-                  ? SizedBox()
+                  ? const SizedBox()
                   : state.isCharging
                       ? const CircularProgressIndicator()
                       : Column(children: [

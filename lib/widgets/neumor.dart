@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class NeumorConverter extends StatelessWidget {
@@ -21,7 +20,6 @@ class NeumorConverter extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: child,
       padding: EdgeInsets.all(padding),
       margin: EdgeInsets.all(margin),
       decoration: BoxDecoration(
@@ -41,6 +39,7 @@ class NeumorConverter extends StatelessWidget {
               spreadRadius: 1,
             ),
           ]),
+      child: child,
     );
   }
 }

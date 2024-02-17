@@ -238,7 +238,7 @@ class _CuartaPageState extends State<CuartaPage> {
                       height: 15,
                     ),
                     nftMarketplaces.isEmpty
-                        ? SizedBox()
+                        ? const SizedBox()
                         : isCharging
                             ? const CircularProgressIndicator()
                             : Center(
@@ -255,7 +255,7 @@ class _CuartaPageState extends State<CuartaPage> {
                                               padding: 2,
                                               child: Center(
                                                 child: Padding(
-                                                    padding: EdgeInsets.all(5),
+                                                    padding: const EdgeInsets.all(5),
                                                     child: Center(
                                                         child: Text(item))),
                                               ),
@@ -276,11 +276,11 @@ class _CuartaPageState extends State<CuartaPage> {
                       "Marketplaces:",
                       style: TextStyle(fontWeight: FontWeight.bold),
                     ),
-                    Divider(
+                    const Divider(
                       height: 15,
                     ),
                     mapStoreWithBaseUri.isEmpty
-                        ? SizedBox()
+                        ? const SizedBox()
                         : isCharging
                             ? const CircularProgressIndicator()
                             : Column(children: [

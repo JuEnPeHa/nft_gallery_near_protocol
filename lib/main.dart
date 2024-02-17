@@ -1,21 +1,19 @@
 import 'dart:developer';
 
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:nft_gallery/cuarta_page.dart';
-import 'package:nft_gallery/hive_models/hive_data.dart';
-import 'package:nft_gallery/models/nft.dart';
-import 'package:nft_gallery/main_screens.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:nft_gallery/models/nft.dart';
 import 'package:nft_gallery/providers/bloc/nfts_bloc.dart';
 import 'package:nft_gallery/providers/nfts_provider.dart';
+import 'package:nft_gallery/utils/graphiQL_functions.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(NftFinalAdapter());
-
+  await listOfAllNftContracts('', operationsDoc, 'MyQuery');
   runApp(const AppState());
 }
 

@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:nft_gallery/interceptor/dio_connectivity_request_retrier.dart';
 import 'package:dio/dio.dart';
+import 'package:nft_gallery/interceptor/dio_connectivity_request_retrier.dart';
 
 class RetryOnConnectionChangeInterceptor extends Interceptor {
   final DioConnectivityRequestRetrier requestRetrier;
@@ -11,7 +11,7 @@ class RetryOnConnectionChangeInterceptor extends Interceptor {
   });
 
   @override
-  Future onError(DioError err, ErrorInterceptorHandler handler) async {
+  Future onError(DioException err, ErrorInterceptorHandler handler) async {
     if (_shouldRetry(err)) {
       try {
         return requestRetrier.scheduleRequestRetry(err.requestOptions);
@@ -28,8 +28,8 @@ class RetryOnConnectionChangeInterceptor extends Interceptor {
     // return super.onError(err);
   }
 
-  bool _shouldRetry(DioError err) {
-    return (err.type == DioErrorType.other && err.error != null) ||
+  bool _shouldRetry(DioException err) {
+    return (err.type == DioExceptionType.unknown && err.error != null) ||
         (err.error is SocketException && err.error != null);
   }
 }
