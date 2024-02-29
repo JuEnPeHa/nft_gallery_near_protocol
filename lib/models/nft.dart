@@ -47,17 +47,17 @@ class NFT {
   }
 }
 
-class MarketplacesClean {
+class MarketplacesWithNumberOfNFTs {
   final String marketplace;
   final int numberNftFromMarketplace;
 
-  MarketplacesClean({
+  MarketplacesWithNumberOfNFTs({
     required this.marketplace,
     required this.numberNftFromMarketplace,
   });
 
-  factory MarketplacesClean.fromJson(Map<String, dynamic> json) =>
-      MarketplacesClean(
+  factory MarketplacesWithNumberOfNFTs.fromJson(Map<String, dynamic> json) =>
+      MarketplacesWithNumberOfNFTs(
         marketplace: json["marketplace"],
         numberNftFromMarketplace: json["numberNftFromMarketplace"],
       );
@@ -69,7 +69,7 @@ class MarketplacesClean {
 
   @override
   String toString() {
-    return 'MarketplacesClean{marketplace: $marketplace, numberNftFromMarketplace: $numberNftFromMarketplace}';
+    return 'MarketplacesWithNumberOfNFTs{marketplace: $marketplace, numberNftFromMarketplace: $numberNftFromMarketplace}';
   }
 }
 
@@ -155,9 +155,8 @@ class NftFinal extends HiveObject {
   final String artist;
   @HiveField(10)
   final String category;
-  
 
-  NftFinal ({
+  NftFinal({
     required this.id,
     required this.title,
     required this.description,

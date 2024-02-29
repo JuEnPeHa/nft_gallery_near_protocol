@@ -1,19 +1,40 @@
 part of 'nfts_bloc.dart';
 
 abstract class NftsState extends Equatable {
+  // NFT Account del que requerimos la información
+  // NFT Account from which we require the information
   final String nearAccountID;
+  // Si estamos en Mainnet o Testnet
+  // If we are in Mainnet or Testnet
   final bool isMainnet;
+  // Si la cuenta es válida
+  // If the account is valid
   final bool validAccount;
+  // Si estamos cargando
+  // If we are charging
   final bool isCharging;
+  // Total de NFTs
+  // Total NFTs
   final int totalNftParas;
 
+  // Contratos incluyendo spam
+  // Contracts including spam
   final List<String> nftMarketplacesWithSpam;
-  final List<String> nftMarketplacesPreClean;
-  final List<MarketplacesClean> marketplacesClean;
-  final List<int> numberNfts;
+  // Contratos sin spam (por ahora solo mintbase y paras)
+  // Contracts without spam (for now only mintbase and paras)
+  final List<String> nftMarketplacesChoosedMarketplaces;
+  // Contratos limpios de spam (por ahora solo mintbase y paras) junto con el número de NFTs de cada contrato
+  // Clean contracts without spam (for now only mintbase and paras) along with the number of NFTs of each contract
+  final List<MarketplacesWithNumberOfNFTs> marketplacesCleanWithNumberOfNFTs;
+  // final List<int> numberNfts; !todo: remove
+  // NFTMarketplace { final String storeName; final String baseUri; final int numberNfts; } mapStoreWithBaseUri
+  // Es como marketplacesClean pero con la clase NFTMarketplace y solo incluye los contratos con número de NFTs mayor a 0
+  // It is like marketplacesClean but with the NFTMarketplace class and only includes contracts with number of NFTs greater than 0
   final List<NFTMarketplace> mapStoreWithBaseUri;
+  // Lista de todos los NFTs de la cuenta
+  // List of all the NFTs of the account
   final List<NftFinal> nfts;
-  final int id;
+  // final int id; !todo: remove
 
   const NftsState({
     required this.nearAccountID,
@@ -22,12 +43,10 @@ abstract class NftsState extends Equatable {
     required this.isCharging,
     required this.totalNftParas,
     required this.nftMarketplacesWithSpam,
-    required this.nftMarketplacesPreClean,
-    required this.marketplacesClean,
-    required this.numberNfts,
+    required this.nftMarketplacesChoosedMarketplaces,
+    required this.marketplacesCleanWithNumberOfNFTs,
     required this.mapStoreWithBaseUri,
     required this.nfts,
-    required this.id,
   });
 
   @override
@@ -38,12 +57,10 @@ abstract class NftsState extends Equatable {
         isCharging,
         totalNftParas,
         nftMarketplacesWithSpam,
-        nftMarketplacesPreClean,
-        marketplacesClean,
-        numberNfts,
+        nftMarketplacesChoosedMarketplaces,
+        marketplacesCleanWithNumberOfNFTs,
         mapStoreWithBaseUri,
         nfts,
-        id,
       ];
 }
 
@@ -56,12 +73,10 @@ class NftsInitialState extends NftsState {
           isCharging: false,
           totalNftParas: 0,
           nftMarketplacesWithSpam: const [],
-          nftMarketplacesPreClean: const [],
-          marketplacesClean: const [],
-          numberNfts: const [],
+          nftMarketplacesChoosedMarketplaces: const [],
+          marketplacesCleanWithNumberOfNFTs: const [],
           mapStoreWithBaseUri: const [],
           nfts: const [],
-          id: 0,
         );
 
   @override
@@ -72,12 +87,10 @@ class NftsInitialState extends NftsState {
         isCharging,
         totalNftParas,
         nftMarketplacesWithSpam,
-        nftMarketplacesPreClean,
-        marketplacesClean,
-        numberNfts,
+        nftMarketplacesChoosedMarketplaces,
+        marketplacesCleanWithNumberOfNFTs,
         mapStoreWithBaseUri,
         nfts,
-        id,
       ];
 }
 
@@ -93,12 +106,10 @@ class NftsSetAccountWithoutFetchChargedState extends NftsState {
           isCharging: false,
           totalNftParas: 0,
           nftMarketplacesWithSpam: const [],
-          nftMarketplacesPreClean: const [],
-          marketplacesClean: const [],
-          numberNfts: const [],
+          nftMarketplacesChoosedMarketplaces: const [],
+          marketplacesCleanWithNumberOfNFTs: const [],
           mapStoreWithBaseUri: const [],
           nfts: const [],
-          id: 0,
         );
 }
 
@@ -114,12 +125,10 @@ class NftsLoadingState extends NftsState {
           isCharging: true,
           totalNftParas: 0,
           nftMarketplacesWithSpam: const [],
-          nftMarketplacesPreClean: const [],
-          marketplacesClean: const [],
-          numberNfts: const [],
+          nftMarketplacesChoosedMarketplaces: const [],
+          marketplacesCleanWithNumberOfNFTs: const [],
           mapStoreWithBaseUri: const [],
           nfts: const [],
-          id: 0,
         );
 }
 
@@ -136,12 +145,10 @@ class NftsMarketplacesWithSpamChargedState extends NftsState {
           isCharging: true,
           totalNftParas: 0,
           nftMarketplacesWithSpam: nftMarketplacesWithSpam,
-          nftMarketplacesPreClean: const [],
-          marketplacesClean: const [],
-          numberNfts: const [],
+          nftMarketplacesChoosedMarketplaces: const [],
+          marketplacesCleanWithNumberOfNFTs: const [],
           mapStoreWithBaseUri: const [],
           nfts: const [],
-          id: 0,
         );
 }
 
@@ -159,12 +166,10 @@ class NftsMarketplacesPreCleanChargedState extends NftsState {
           isCharging: true,
           totalNftParas: 0,
           nftMarketplacesWithSpam: nftMarketplacesWithSpam,
-          nftMarketplacesPreClean: nftMarketplacesPreClean,
-          marketplacesClean: const [],
-          numberNfts: const [],
+          nftMarketplacesChoosedMarketplaces: nftMarketplacesPreClean,
+          marketplacesCleanWithNumberOfNFTs: const [],
           mapStoreWithBaseUri: const [],
           nfts: const [],
-          id: 0,
         );
 }
 
@@ -174,7 +179,7 @@ class NftsMarketplacesCleanChargedState extends NftsState {
     required bool isMainnet,
     required bool validAccount,
     required List<String> nftMarketplacesPreClean,
-    required List<MarketplacesClean> marketplacesClean,
+    required List<MarketplacesWithNumberOfNFTs> marketplacesClean,
   }) : super(
           nearAccountID: nearAccountID,
           isMainnet: isMainnet,
@@ -182,12 +187,10 @@ class NftsMarketplacesCleanChargedState extends NftsState {
           isCharging: true,
           totalNftParas: 0,
           nftMarketplacesWithSpam: const [],
-          nftMarketplacesPreClean: nftMarketplacesPreClean,
-          marketplacesClean: marketplacesClean,
-          numberNfts: const [],
+          nftMarketplacesChoosedMarketplaces: nftMarketplacesPreClean,
+          marketplacesCleanWithNumberOfNFTs: marketplacesClean,
           mapStoreWithBaseUri: const [],
           nfts: const [],
-          id: 0,
         );
 }
 
@@ -198,7 +201,7 @@ class NftsMarketPlacesChargedState extends NftsState {
     required bool validAccount,
     required List<String> nftMarketplacesWithSpam,
     required List<String> nftMarketplacesPreClean,
-    required List<MarketplacesClean> marketplacesClean,
+    required List<MarketplacesWithNumberOfNFTs> marketplacesClean,
     // required List<String> nftMarketplaces
   }) : super(
           nearAccountID: nearAccountID,
@@ -207,11 +210,9 @@ class NftsMarketPlacesChargedState extends NftsState {
           isCharging: true,
           totalNftParas: 0,
           nftMarketplacesWithSpam: nftMarketplacesWithSpam,
-          nftMarketplacesPreClean: nftMarketplacesPreClean,
-          marketplacesClean: marketplacesClean,
-          numberNfts: const [],
+          nftMarketplacesChoosedMarketplaces: nftMarketplacesPreClean,
+          marketplacesCleanWithNumberOfNFTs: marketplacesClean,
           mapStoreWithBaseUri: const [],
           nfts: const [],
-          id: 0,
         );
 }

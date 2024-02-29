@@ -1,18 +1,12 @@
-import 'package:nft_gallery/constants.dart';
-import 'package:nft_gallery/hive_models/hive_data.dart';
-import 'package:nft_gallery/models/arweaveRawMetadata.dart';
-import 'package:nft_gallery/models/listNFTParas.dart';
-import 'package:nft_gallery/models/nft.dart';
-import 'package:nft_gallery/models/nft_marketplace.dart';
-import 'package:nft_gallery/models/resultNFTMetadataMintbase.dart';
-import 'package:nft_gallery/models/resultNFTMetadataParas.dart';
-import 'package:nft_gallery/main_screens.dart';
-import 'package:nft_gallery/widgets/neumor.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
-import 'package:nft_gallery/utils/rpcFunctions.dart';
+import 'package:nft_gallery/hive_models/hive_data.dart';
+import 'package:nft_gallery/main_screens.dart';
+import 'package:nft_gallery/models/nft.dart';
+import 'package:nft_gallery/models/nft_marketplace.dart';
+import 'package:nft_gallery/utils/rpc_functions.dart';
+import 'package:nft_gallery/widgets/neumor.dart';
 
 class CuartaPage extends StatefulWidget {
   const CuartaPage({Key? key}) : super(key: key);
@@ -70,8 +64,8 @@ class _CuartaPageState extends State<CuartaPage> {
   bool allDataComplete = false;
   bool validAccount = false;
   List<String> nftMarketplaces = [];
-  List<dynamic> nftMarketplacesPreClean = [];
-  List<MarketplacesClean> marketplacesClean = [];
+  List<String> nftMarketplacesPreClean = [];
+  List<MarketplacesWithNumberOfNFTs> marketplacesClean = [];
   List<int> numberNfts = [];
   List<NFTMarketplace> mapStoreWithBaseUri = [];
   List<NftFinal> nfts = [];
@@ -105,7 +99,7 @@ class _CuartaPageState extends State<CuartaPage> {
           }
         }
         setState(() {});
-        fetchNFTMarketPlaceImages(
+        fetchNFTMarketPlaceImagesConcurrent(
                 marketplaces: nftMarketplacesPreClean, numberNfts: numberNfts)
             .then((value) {
           mapStoreWithBaseUri = value;
@@ -255,7 +249,8 @@ class _CuartaPageState extends State<CuartaPage> {
                                               padding: 2,
                                               child: Center(
                                                 child: Padding(
-                                                    padding: const EdgeInsets.all(5),
+                                                    padding:
+                                                        const EdgeInsets.all(5),
                                                     child: Center(
                                                         child: Text(item))),
                                               ),

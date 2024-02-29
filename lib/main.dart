@@ -6,14 +6,12 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:nft_gallery/models/nft.dart';
 import 'package:nft_gallery/providers/bloc/nfts_bloc.dart';
 import 'package:nft_gallery/providers/nfts_provider.dart';
-import 'package:nft_gallery/utils/graphiQL_functions.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   Hive.registerAdapter(NftFinalAdapter());
-  await listOfAllNftContracts('', operationsDoc, 'MyQuery');
   runApp(const AppState());
 }
 
@@ -22,7 +20,7 @@ class AppState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    log('AppState build' + DateTime.now().toString());
+    log('AppState build${DateTime.now()}');
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(

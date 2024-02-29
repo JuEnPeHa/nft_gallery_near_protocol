@@ -25,7 +25,16 @@ class BodyMarketplaces extends StatelessWidget {
               if (state is NftsInitialState) const ShimmerInitialText(),
               if (state is NftsLoadingState) const ShimmerLoadingList(),
               state.mapStoreWithBaseUri.isEmpty
-                  ? const SizedBox()
+                  ? const ColoredBox(
+                      color: Colors.red,
+                      child: Center(
+                        child: Text(
+                          "No se encontraron Marketplaces",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                      ),
+                    )
                   : state.isCharging
                       ? const CircularProgressIndicator()
                       : Column(children: [

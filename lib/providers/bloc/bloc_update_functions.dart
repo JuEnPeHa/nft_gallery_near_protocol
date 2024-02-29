@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nft_gallery/providers/bloc/nfts_bloc.dart';
-import 'package:nft_gallery/utils/rpcFunctions.dart';
+import 'package:nft_gallery/utils/rpc_functions.dart';
 
 void setAccountWithoutFetch(
     {required String nearAccountId, required BuildContext context}) {
@@ -55,6 +55,17 @@ void setMarketplacesPreClean({
   BlocProvider.of<NftsBloc>(context).add(
     NftMarketplacesPreCleanEvent(
       marketplacesPreClean: marketplacesPreClean,
+    ),
+  );
+}
+
+void setNftMarketplacesClean({
+  required List<String> nftMarketplacesClean,
+  required BuildContext context,
+}) {
+  BlocProvider.of<NftsBloc>(context).add(
+    NftMarketplacesCleanEvent(
+      marketplacesClean: nftMarketplacesClean,
     ),
   );
 }

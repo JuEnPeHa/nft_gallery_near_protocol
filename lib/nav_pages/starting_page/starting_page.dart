@@ -3,7 +3,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:nft_gallery/nav_pages/starting_page/app_bar_near.dart';
-import 'package:nft_gallery/nav_pages/starting_page/body_contratos.dart';
 import 'package:nft_gallery/nav_pages/starting_page/body_marketplaces.dart';
 import 'package:nft_gallery/nav_pages/starting_page/near_account_input.dart';
 import 'package:nft_gallery/providers/bloc/nfts_bloc.dart';
@@ -35,7 +34,7 @@ class BodyNearAccount extends StatelessWidget {
     return CustomScrollView(
       slivers: <Widget>[
         const SliverAppBarNear(),
-        const BannerTestingNewHelperService(),
+        // const BannerTestingNewHelperService(),
         SliverToBoxAdapter(
           child: Column(
             children: <Widget>[
@@ -75,7 +74,7 @@ class BodyNearAccount extends StatelessWidget {
                 },
               ),
               // NearAccountButton(),
-              BodyContratos(),
+              // BodyContratos(), //todo! Descomentar
               BodyMarketplaces(),
             ],
           ),

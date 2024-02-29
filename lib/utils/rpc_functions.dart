@@ -2,6 +2,10 @@ import 'dart:convert';
 import 'dart:developer' as developer;
 import 'dart:math';
 
+import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
+import 'package:nft_gallery/constants.dart';
 import 'package:nft_gallery/interceptor/dio_connectivity_request_retrier.dart';
 import 'package:nft_gallery/interceptor/retry_interceptor.dart';
 import 'package:nft_gallery/models/arweaveRawMetadata.dart';
@@ -13,13 +17,10 @@ import 'package:nft_gallery/models/nft.dart';
 import 'package:nft_gallery/models/nft_marketplace.dart';
 import 'package:nft_gallery/models/resultNFTMetadataMintbase.dart';
 import 'package:nft_gallery/models/resultNFTMetadataParas.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
-import 'package:nft_gallery/constants.dart';
 
 var rng = Random();
 
+// Call to the RPC to get the likely NFT marketplaces (It returns a list of strings and includes Spam)
 Future<List<String>> fetchNFTMarketplaces(String aID, bool isM) async {
   var likelyContracts = isM
       ? Uri.parse(ACCOUNT_HELPER_URL + '/account/' + aID + '/likelyNFTs')
@@ -37,61 +38,6 @@ Future<List<String>> fetchNFTMarketplaces(String aID, bool isM) async {
     return likelyNFTs.map((e) => e.toString()).toList();
   } else {
     throw Exception('Failed to load likely NFTs');
-  }
-}
-
-Future<List<NFTMarketplace>> fetchNFTMarketPlaceImages(
-    {required List<dynamic> marketplaces,
-    required List<int> numberNfts}) async {
-  const methodName = "nft_metadata";
-  var url = Uri.parse(RPC_URL);
-  List<NFTMarketplace> nftMarketplaces = [];
-  for (var i = 0; i < marketplaces.length; i++) {
-    var requestBody =
-        getHttpBody(methodName: methodName, marketplace: marketplaces[i]);
-    var response =
-        await http.post(url, body: json.encode(requestBody), headers: HEADERS);
-    if (response.statusCode == 200) {
-      nftMarketplaces.add(NFTMarketplace(
-          storeName: marketplaces[i],
-          baseUri: getBaseUri(
-              GenericJsonRpcResponse.fromJson(json.decode(response.body))),
-          numberNfts: numberNfts[i]));
-    }
-  }
-  //print(nftMarketplaces);
-  print("HOLAHOLAHOLA" + utf8.decode([34, 52, 34]));
-  return nftMarketplaces;
-}
-
-Future<List<ResultNFTMetadataParas>> fetchNFTMetadataParas(
-    {String marketplace = "x.paras.near",
-    required String accountId,
-    String fromIndex = "0",
-    int indexLimit = 4}) async {
-  const methodName = "nft_tokens_for_owner";
-  var url = Uri.parse(RPC_URL);
-  var args = {
-    "account_id": accountId,
-    "from_index": fromIndex,
-    "limit": indexLimit
-  };
-  var argsBase64 = base64.encode(utf8.encode(json.encode(args)));
-  print(argsBase64);
-  var requestBody = getHttpBody(
-      methodName: methodName, marketplace: marketplace, argsBase64: argsBase64);
-  var response =
-      await http.post(url, body: json.encode(requestBody), headers: HEADERS);
-  if (response.statusCode == 200) {
-    //print(json.decode(response.body));
-    var generic = GenericJsonRpcResponse.fromJson(json.decode(response.body));
-    //print(decodeBuffer(bufferForDecode: generic.result.result));
-    var inside = json.decode(
-        json.encode(decodeBuffer(bufferForDecode: generic.result.result)));
-    ListNFTParas lista = ListNFTParas.fromJson(inside);
-    return lista.list;
-  } else {
-    throw Exception('Failed to load NFTs');
   }
 }
 
@@ -146,7 +92,7 @@ Future<List<NftFinal>> fetchNFTMetadataAll({
               title: metadata.metadata.title,
               description: metadata.metadata.description,
               principalImageUrl:
-                  marketplaces[e].baseUri + '/' + metadata.metadata.media,
+                  '${marketplaces[e].baseUri}/${metadata.metadata.media}',
               musicOrVideoUrl: "",
               documentUrl: "",
               isMusic: false,
@@ -163,7 +109,7 @@ Future<List<NftFinal>> fetchNFTMetadataAll({
           ResultNFTMetadataMintbase metadata = insideLista[u];
           ArweaveRawMetadata arweaveRawMetadata = await fetchNftFinalMintbase(
               baseUri: marketplaces[e].baseUri,
-              lastPartUrl: "/" + metadata.metadata.reference);
+              lastPartUrl: "/${metadata.metadata.reference}");
           print(metadata);
           resultado.add(NftFinal(
               id: id,
@@ -191,36 +137,36 @@ Future<List<NftFinal>> fetchNFTMetadataAll({
   return resultado;
 }
 
-Future<int> fetchNumberNFTParas({
-  String marketplace = "x.paras.near",
-  required String accountId,
+Future<List<NFTMarketplace>> fetchNFTMarketPlaceImagesConcurrent({
+  required List<String> marketplaces,
+  required List<int> numberNfts,
 }) async {
-  const methodName = "nft_supply_for_owner";
+  const methodName = "nft_metadata";
   var url = Uri.parse(RPC_URL);
-  var args = {
-    "account_id": accountId,
-  };
-  var argsBase64 = base64.encode(utf8.encode(json.encode(args)));
-  print(argsBase64);
-  var requestBody = getHttpBody(
-      methodName: methodName, marketplace: marketplace, argsBase64: argsBase64);
-  var response =
-      await http.post(url, body: json.encode(requestBody), headers: HEADERS);
-  if (response.statusCode == 200) {
-    print(json.decode(response.body));
-    var generic = GenericJsonRpcResponse.fromJson(json.decode(response.body));
-    print(decodeBufferIntForNumberNftOnAccount(
-        bufferForDecode: generic.result.result));
-    var inside = json.decode(json.encode(decodeBufferIntForNumberNftOnAccount(
-        bufferForDecode: generic.result.result)));
-    if (inside is int) {
-      return inside;
-    } else {
-      return 0;
-    }
-  } else {
-    throw Exception('Failed to load NFTs');
+  List<Future<NFTMarketplace>> futures = [];
+  for (var i = 0; i < marketplaces.length; i++) {
+    var requestBody =
+        getHttpBody(methodName: methodName, marketplace: marketplaces[i]);
+    futures.add(http
+        .post(url, body: json.encode(requestBody), headers: HEADERS)
+        .then((response) {
+      if (response.statusCode == 200) {
+        return NFTMarketplace(
+            storeName: marketplaces[i],
+            baseUri: getBaseUri(
+                GenericJsonRpcResponse.fromJson(json.decode(response.body))),
+            numberNfts: numberNfts[i]);
+      } else {
+        throw Exception('Failed to load NFTs');
+      }
+    }).catchError((error) {
+      print(error);
+      return NFTMarketplace(
+          storeName: marketplaces[i], baseUri: "", numberNfts: 0);
+    }));
   }
+  List<NFTMarketplace> nftMarketplaces = await Future.wait(futures);
+  return nftMarketplaces;
 }
 
 Future<List<int>> fetchNumberNFTAllConcurrent({
@@ -233,14 +179,13 @@ Future<List<int>> fetchNumberNFTAllConcurrent({
     "account_id": accountId,
   };
   var argsBase64 = base64.encode(utf8.encode(json.encode(args)));
-  print(argsBase64);
+  print("argsBase64" + argsBase64);
 
   List<Future<int>> futures = [];
   for (var i = 0; i < marketplaces.length; i++) {
-    var marketplace = marketplaces[i];
     var requestBody = getHttpBody(
         methodName: methodName,
-        marketplace: marketplace,
+        marketplace: marketplaces[i],
         argsBase64: argsBase64);
 
     futures.add(http
@@ -248,11 +193,11 @@ Future<List<int>> fetchNumberNFTAllConcurrent({
         .then((response) {
       if (response.statusCode == 200) {
         print(json.decode(response.body));
-        var generic =
+        final GenericJsonRpcResponse generic =
             GenericJsonRpcResponse.fromJson(json.decode(response.body));
         print(decodeBufferIntForNumberNftOnAccount(
             bufferForDecode: generic.result.result));
-        var inside = json.decode(json.encode(
+        final dynamic inside = json.decode(json.encode(
             decodeBufferIntForNumberNftOnAccount(
                 bufferForDecode: generic.result.result)));
         if (inside is int) {
@@ -334,16 +279,13 @@ Future<ArweaveRawMetadata> fetchNftFinalMintbase({
   }
 }
 
-int decodeBufferIntForNumberNftOnAccount({required List<int> bufferForDecode}) {
-  var bufferDecoded = utf8.decode(bufferForDecode);
-  final String decoded = json.decode(bufferDecoded);
-  return int.parse(decoded);
-}
+int decodeBufferIntForNumberNftOnAccount(
+        {required List<int> bufferForDecode}) =>
+    int.parse(json.decode(utf8.decode(bufferForDecode)));
 
 List<dynamic> decodeBuffer({required List<int> bufferForDecode}) {
   var bufferDecoded = utf8.decode(bufferForDecode);
   final List<dynamic> decoded = json.decode(bufferDecoded);
-  //print(decoded);
   return decoded;
 }
 
@@ -388,13 +330,7 @@ bool isValidAccount(String accountID) {
   return validAccount;
 }
 
-bool isMainnet(String accountID) {
-  if (accountID.contains("testnet")) {
-    return false;
-  } else {
-    return true;
-  }
-}
+bool isMainnet(String accountID) => !accountID.contains(".testnet");
 
 String getBaseUri(GenericJsonRpcResponse raw) {
   var bufferForDecode = raw.result.result;
@@ -405,13 +341,13 @@ String getBaseUri(GenericJsonRpcResponse raw) {
   return resultMarketData.baseUri;
 }
 
-List<MarketplacesClean> getMarketplacesWithNfts(
+List<MarketplacesWithNumberOfNFTs> getMarketplacesWithNfts(
     {required List<dynamic> nftMarketplaces, required List<int> numberNfts}) {
-  List<MarketplacesClean> marketplacesClean = [];
+  List<MarketplacesWithNumberOfNFTs> marketplacesClean = [];
   List<String> marketplacesNotClean = [];
   for (var i = 0; i < nftMarketplaces.length; i++) {
     if (numberNfts[i] != 0) {
-      marketplacesClean.add(MarketplacesClean(
+      marketplacesClean.add(MarketplacesWithNumberOfNFTs(
           marketplace: nftMarketplaces[i].toString(),
           numberNftFromMarketplace: numberNfts[i]));
     } else {

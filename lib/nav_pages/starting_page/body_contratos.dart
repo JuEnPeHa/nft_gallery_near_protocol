@@ -12,14 +12,16 @@ class BodyContratos extends StatelessWidget {
     return SizedBox(
       child: BlocBuilder<NftsBloc, NftsState>(
         buildWhen: (previous, current) =>
-            previous.marketplacesClean != current.marketplacesClean ||
+            previous.marketplacesCleanWithNumberOfNFTs !=
+                current.marketplacesCleanWithNumberOfNFTs ||
             previous.isCharging != current.isCharging ||
             previous.nftMarketplacesWithSpam !=
                 current.nftMarketplacesWithSpam ||
             previous.nearAccountID != current.nearAccountID ||
             previous.validAccount != current.validAccount ||
             previous.isMainnet != current.isMainnet ||
-            previous.nftMarketplacesPreClean != current.nftMarketplacesPreClean,
+            previous.nftMarketplacesChoosedMarketplaces !=
+                current.nftMarketplacesChoosedMarketplaces,
         builder: (context, state) {
           print('BodyContratos build: ' +
               state.nftMarketplacesWithSpam.toString());
@@ -36,7 +38,16 @@ class BodyContratos extends StatelessWidget {
               if (state is NftsInitialState) const ShimmerInitialText(),
               if (state is NftsLoadingState) const ShimmerLoadingList(),
               state.nftMarketplacesWithSpam.isEmpty
-                  ? const SizedBox()
+                  ? const ColoredBox(
+                      color: Colors.red,
+                      child: Center(
+                        child: Text(
+                          "No se encontraron Contratos",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold, fontSize: 20),
+                        ),
+                      ),
+                    )
                   : Center(
                       child: Column(
                           crossAxisAlignment: CrossAxisAlignment.center,

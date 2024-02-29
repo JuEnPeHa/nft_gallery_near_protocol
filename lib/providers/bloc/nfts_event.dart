@@ -24,15 +24,17 @@ class NftsSetAccountWithoutFetchEvent extends NftsEvent {
 }
 
 class NftsLoadingEvent extends NftsEvent {
-  final String nearAccountID;
-  final bool isMainnet;
-  final bool validAccount;
+  // final String nearAccountID;
+  // final bool isMainnet;
+  // final bool validAccount;
 
-  const NftsLoadingEvent({
-    required this.nearAccountID,
-    required this.isMainnet,
-    required this.validAccount,
-  });
+  const NftsLoadingEvent(
+      //   {
+      //   required this.nearAccountID,
+      //   required this.isMainnet,
+      //   required this.validAccount,
+      // }
+      );
 }
 
 class NftMarketplacesWithSpamEvent extends NftsEvent {
@@ -43,18 +45,34 @@ class NftMarketplacesWithSpamEvent extends NftsEvent {
   });
 }
 
-class NftMarketplacesPreCleanEvent extends NftsEvent {
-  final List<String> marketplacesPreClean;
+// class NftMarketplacesPreCleanEvent extends NftsEvent {
+//   final List<String> marketplacesPreClean;
 
-  const NftMarketplacesPreCleanEvent({
-    required this.marketplacesPreClean,
+//   const NftMarketplacesPreCleanEvent({
+//     required this.marketplacesPreClean,
+//   });
+// }
+
+class NftMarketplacesWithNumberEvent extends NftsEvent {
+  final List<MarketplacesWithNumberOfNFTs> marketplacesChoosed;
+
+  const NftMarketplacesWithNumberEvent({
+    required this.marketplacesChoosed,
   });
 }
 
-class NftMarketplacesCleanEvent extends NftsEvent {
-  final List<String> marketplacesClean;
+class NftMarketplacesMapWithBaseUriEvent extends NftsEvent {
+  final List<NFTMarketplace> mapStoreWithBaseUri;
 
-  const NftMarketplacesCleanEvent({
-    required this.marketplacesClean,
+  const NftMarketplacesMapWithBaseUriEvent({
+    required this.mapStoreWithBaseUri,
+  });
+}
+
+class NftsSetNftsEvent extends NftsEvent {
+  final List<NFT> nfts;
+
+  const NftsSetNftsEvent({
+    required this.nfts,
   });
 }
